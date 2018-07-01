@@ -15,7 +15,9 @@
   "license": "MIT",
   "homepage": "https://github.com/michalborzecki/onepanel-server-mock#readme",
   "dependencies": {
+    "cookie-parser": "1.4.3",
     "express": "4.16.3",
-    "path": "0.12.7"
+    "path": "0.12.7",
+    "uuid": "3.3.2"
   }
 }
