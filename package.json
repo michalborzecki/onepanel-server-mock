@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:watch": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,8 @@
   "dependencies": {
     "cookie-parser": "1.4.3",
     "express": "4.16.3",
+    "express-delay": "0.2.0",
+    "nodemon": "1.17.5",
     "path": "0.12.7",
     "uuid": "3.3.2"
   }

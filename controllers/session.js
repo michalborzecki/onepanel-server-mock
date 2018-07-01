@@ -2,17 +2,15 @@ const uuid = require('uuid/v4');
 
 function SessionController(state) {
   this.state = state;
+  this.config = state.config.session;
 }
 
 SessionController.prototype.createSession = function(req, res) {
-  // one day
-  const cookieMaxAge = 1000 * 3600 * 24;
   const authHeader = req.get('Authorization') || '';
   const authString = authHeader.split(' ')[1] || '';
   const decodedAuthString = Buffer.from(authString, 'base64').toString().split(':');
-  let unauthorized = false;
   if (decodedAuthString.length !== 2) {
-    unauthorized = true;
+    res.sendStatus(401);
   } else {
     const [username, password] = decodedAuthString;
     const user = this.state.users.filter(u => u.username === username)[0];
@@ -20,7 +18,7 @@ SessionController.prototype.createSession = function(req, res) {
       const session = {
         id: uuid(),
         userId: user.id,
-        expires: new Date(Date.now() + cookieMaxAge),
+        expires: new Date(Date.now() + this.config.sessionTimeout),
       }
       this.state.sessions.push(session);
       res.cookie(
@@ -31,26 +29,22 @@ SessionController.prototype.createSession = function(req, res) {
           httpOnly: true,
         }
       );
+      res.sendStatus(200);
     } else {
-      unauthorized = true;
+      res.sendStatus(401);
     }
   }
-  if (unauthorized) {
-    res.sendStatus(401);
-  }
-  res.end();
 }
 
 SessionController.prototype.getSession = function(req, res) {
   const cookieSessionId = req.cookies.sessionId;
   const session = this.state.sessions.filter(s => s.id === cookieSessionId)[0];
-  let notFound = false;
   if (!session) {
-    notFound = true;
+    res.sendStatus(404);
   } else {
     const user = this.state.users.filter(u => u.id === session.userId)[0];
     if (!user) {
-      notFound = true;
+      res.sendStatus(404);
     } else {
       res.json({
         sessionId: session.id,
@@ -58,10 +52,6 @@ SessionController.prototype.getSession = function(req, res) {
       });
     }
   }
-  if (notFound) {
-    res.sendStatus(404);
-  }
-  res.end();
 }
 
 module.exports = SessionController;

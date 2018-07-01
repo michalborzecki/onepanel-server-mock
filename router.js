@@ -1,11 +1,19 @@
 const express = require('express');
+const delay = require('express-delay');
 
-function router(controllers) {
+function router(controllers, config) {
   const router = express.Router();
+  router.use(delay(config.responseDelay));
 
   router.route('/session')
-    .get((...args) => controllers.session.getSession(...args))
-    .post((...args) => controllers.session.createSession(...args));
+    .get(
+      delay(config.session.getSessionDelay),
+      (...args) => controllers.session.getSession(...args)
+    )
+    .post(
+      delay(config.session.createSessionDelay),
+      (...args) => controllers.session.createSession(...args)
+    );
   
   return router;
 }
