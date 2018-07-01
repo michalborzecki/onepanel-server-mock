@@ -59,3 +59,6 @@ typings/
 
 # next.js build output
 .next
+
+# gui_static (built onepanel-gui)
+gui_static/**
