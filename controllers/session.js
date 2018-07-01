@@ -59,4 +59,11 @@ SessionController.prototype.getSession = function(req, res) {
   }
 }
 
+SessionController.prototype.deleteSession = function(req, res) {
+  const cookieSessionId = req.cookies.sessionId;
+  const session = getModel(this.state, 'session', cookieSessionId);
+  this.state.session = this.state.session.filter(s => s !== session);
+  res.sendStatus(204);
+}
+
 module.exports = SessionController;
