@@ -1,5 +1,7 @@
 const uuid = require('uuid/v4');
 
+const getModel = require('../utils/getModel');
+
 function SessionController(state) {
   this.state = state;
   this.config = state.config.session;
@@ -13,14 +15,17 @@ SessionController.prototype.createSession = function(req, res) {
     res.sendStatus(401);
   } else {
     const [username, password] = decodedAuthString;
-    const user = this.state.users.filter(u => u.username === username)[0];
-    if (user && user.password === password) {
+    const user = getModel(this.state, 'user', {
+      username,
+      password, 
+    });
+    if (user) {
       const session = {
         id: uuid(),
         userId: user.id,
         expires: new Date(Date.now() + this.config.sessionTimeout),
       }
-      this.state.sessions.push(session);
+      this.state.session.push(session);
       res.cookie(
         'sessionId',
         session.id,
@@ -38,11 +43,11 @@ SessionController.prototype.createSession = function(req, res) {
 
 SessionController.prototype.getSession = function(req, res) {
   const cookieSessionId = req.cookies.sessionId;
-  const session = this.state.sessions.filter(s => s.id === cookieSessionId)[0];
+  const session = getModel(this.state, 'session', cookieSessionId);
   if (!session) {
     res.sendStatus(404);
   } else {
-    const user = this.state.users.filter(u => u.id === session.userId)[0];
+    const user = getModel(this.state, 'user', session.userId);
     if (!user) {
       res.sendStatus(404);
     } else {

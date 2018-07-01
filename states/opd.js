@@ -1,8 +1,8 @@
 module.exports = {
-  users: [{
+  user: [{
     id: 0,
     username: 'admin',
     password: 'password',
   }],
-  sessions: [],
+  session: [],
 };
