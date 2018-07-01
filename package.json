@@ -1,0 +1,16 @@
+{
+  "name": "onepanel-server-mock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalborzecki/onepanel-server-mock.git"
+  },
+  "author": "Michal Borzecki",
+  "license": "MIT",
+  "homepage": "https://github.com/michalborzecki/onepanel-server-mock#readme"
+}
