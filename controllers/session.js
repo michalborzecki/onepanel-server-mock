@@ -17,7 +17,7 @@ SessionController.prototype.createSession = function(req, res) {
     const [username, password] = decodedAuthString;
     const user = getModel(this.state, 'user', {
       username,
-      password, 
+      password,
     });
     if (user) {
       const session = {

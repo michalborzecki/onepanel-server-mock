@@ -19,6 +19,22 @@ function router(controllers, config) {
       (...args) => controllers.session.deleteSession(...args)
     );
   
+  router.route('/node')
+    .get(
+      delay(config.node.getNodeDelay),
+      (...args) => controllers.node.getNode(...args)
+    );
+  
+  router.route('/users')
+    .get(
+      delay(config.users.getUsersDelay),
+      (...args) => controllers.users.getUsers(...args)
+    )
+    .post(
+      delay(config.users.createUserDelay),
+      (...args) => controllers.users.createUser(...args)
+    );
+  
   return router;
 }
 
